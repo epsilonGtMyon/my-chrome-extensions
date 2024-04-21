@@ -102,25 +102,27 @@
       return;
     }
 
-    const ul = document.createElement("ul");
-    repositoresAreaElem.appendChild(ul);
+    const div = document.createElement("div");
+    div.classList.add("collection")
+    repositoresAreaElem.appendChild(div);
 
     for (const repo of repositories) {
-      const li = document.createElement("li");
-      ul.appendChild(li);
+      const a = document.createElement("a");
+      div.appendChild(a);
 
-      const button = document.createElement("button");
-      button.textContent = repo.name;
+      a.textContent = repo.name;
+      a.classList.add("collection-item")
+      a.href="#"
       // クリック時はコンテンツページ側でダウンロードする。
       // argsを使うにはfuncにする必要がある。
-      button.onclick = async () => {
-        await chrome.scripting.executeScript({
+      a.onclick = () => {
+        chrome.scripting.executeScript({
           target: { tabId: inspectedWindowTabId },
           func: downloadRepoInfo,
           args : [ repo ],
         });
+        return false
       }
-      li.appendChild(button);
     }
   });
 
